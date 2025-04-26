@@ -1,0 +1,379 @@
+# Application Configuration
+application:
+  debug: true
+  host: '0.0.0.0'
+  port: 5000
+
+# Model Paths
+# ... other parts of config.yaml ...
+
+# In config.yaml
+
+models:
+  paths:
+    rf_model: 'Models/rf_model.pkl' # This was already correct
+    # VVVV This is the line you need to change VVVV
+    random_forest_regressor: 'Models/rf_model.pkl' # Corrected path
+    # ^^^^ This is the line you need to change ^^^^
+    crop_model: 'Models/Crop Type_Label_mapping.pkl' # Ensure this path is correct too
+    scaler: 'Models/Fertilizer Name_label_mapping.pkl'              # Ensure this path is correct too
+
+# ... rest of your config.yaml ...
+# ... rest of config.yaml 
+
+# Data Mappings
+mappings:
+  soil_type:
+    'Black': 0
+    'Clayey': 1
+    'Loamy': 2
+    'Red': 3
+    'Sandy': 4
+  
+  crop_type:
+    'Barley': 0
+    'Cotton': 1
+    'Ground Nuts': 2
+    'Maize': 3
+    'Millets': 4
+    'Oil seeds': 5
+    'Paddy': 6
+    'Pulses': 7
+    'Sugarcane': 8
+    'Tobacco': 9
+    'Wheat': 10
+  
+  fertilizer_name:
+    0: '10-26-26'
+    1: '14-35-14'
+    2: '17-17-17'
+    3: '20-20'
+    4: '28-28'
+    5: 'DAP'
+    6: 'Urea'
+
+# Feature Ranges
+feature_ranges:
+  fertilizer:
+    'Temparature': [25, 38]
+    'Humidity': [50, 72]
+    'Soil Moisture': [25, 65]
+    'Nitrogen': [4, 42]
+    'Potassium': [0, 19]
+    'Phosphorous': [0, 42]
+  
+  crop:
+    'N': [0, 140]
+    'P': [5, 145]
+    'K': [5, 205]
+    'temperature': [8.825675, 43.675493]
+    'humidity': [14.258040, 99.981876]
+    'ph': [3.504752, 9.935091]
+    'rainfall': [20.211267, 298.560117]
+
+# Fertilizer Descriptions
+fertilizer_descriptions:
+  '10-26-26': |
+    This balanced fertilizer contains 10% Nitrogen (N), 26% Phosphorus (P), and 26% Potassium (K).
+    It is particularly effective for crops that require strong root development and enhanced flowering.
+    The high phosphorus content aids in the establishment of roots, making it ideal for use during the early stages of plant growth or when transplanting.
+    The potassium supports the overall health of the plant by strengthening the plant's ability to resist diseases and stress, including drought.
+  
+  '14-35-14': |
+    This fertilizer contains 14% Nitrogen, 35% Phosphorus, and 14% Potassium, making it a phosphorus-rich option.
+    It is especially useful for crops that demand significant root development and flowering.
+    The elevated phosphorus level promotes early plant development and enhances the blooming phase.
+    While the moderate levels of nitrogen and potassium ensure that the plants have adequate green growth and overall health, this formulation is particularly suitable for flowering plants and root crops.
+  
+  '17-17-17': |
+    An all-purpose fertilizer containing 17% Nitrogen, 17% Phosphorus, and 17% Potassium.
+    This balanced nutrient ratio is designed for general use across a wide variety of crops, providing comprehensive nutrition.
+    Nitrogen promotes lush, green foliage; phosphorus encourages strong root development and efficient energy transfer within the plant;
+    potassium aids in water regulation, enzyme activation, and disease resistance. This fertilizer is often used when a balanced nutritional approach is needed throughout the growing season.
+  
+  '20-20': |
+    This fertilizer offers 20% Nitrogen and 20% Phosphorus. It is primarily nitrogen-rich, making it ideal for promoting leafy, vegetative growth, which is crucial during the early stages of plant development.
+    The phosphorus content supports root development and energy transfer, helping plants establish themselves more effectively.
+    This formulation is particularly useful for leafy vegetables, cereals, and other crops that benefit from vigorous top growth.
+  
+  '28-28': |
+    Containing 28% Nitrogen and 28% Phosphorus, this fertilizer is designed to provide a strong nitrogen-phosphorus boost to plants.
+    The high nitrogen content drives lush, green foliage, making it suitable for the vegetative phase of growth.
+    Phosphorus ensures robust root systems and aids in flowering and fruiting, which is essential for crops needing extensive root support or those grown in soils with low phosphorus levels.
+  
+  'DAP': |
+    Di-Ammonium Phosphate (DAP) is a widely used fertilizer containing 18% Nitrogen and 46% Phosphorus.
+    This high-phosphorus fertilizer is ideal for boosting root growth and enhancing flower and fruit production.
+    Nitrogen supports vigorous leaf and stem growth, while phosphorus is crucial for root development and energy transfer,
+    making DAP particularly beneficial during the early stages of crop growth or when soil tests indicate low phosphorus levels.
+  
+  'Urea': |
+    Urea is a highly concentrated nitrogen fertilizer containing 46% Nitrogen. It is known for providing a quick release of nitrogen,
+    which is essential for promoting rapid, lush, green growth in plants.
+    Nitrogen is a critical component of chlorophyll, the compound plants use in photosynthesis, and is vital for leafy crops, grasses, and cereals.
+    Urea is often applied to crops needing a fast nitrogen boost, especially in the early growth stages or when signs of nitrogen deficiency appear.
+
+# Random Forest Model Columns (for the crop yield prediction)
+rf_columns:
+  - 'Crop_Year'
+  - 'Area'
+  # Sub-county Names (Mombasa County)
+  - 'Sub-county_Name_CHANGAMWE'
+  - 'Sub-county_Name_JOMVU'
+  - 'Sub-county_Name_KISAUNI'
+  - 'Sub-county_Name_LIKONI'
+  - 'Sub-county_Name_MVITA'
+  - 'Sub-county_Name_NYALI'
+  # Sub-county Names (Kwale County)
+  - 'Sub-county_Name_KINANGO'
+  - 'Sub-county_Name_LUNGA LUNGA'
+  - 'Sub-county_Name_MSAMBWENI'
+  - 'Sub-county_Name_MATUGA'
+  # Sub-county Names (Kilifi County)
+  - 'Sub-county_Name_GANZE'
+  - 'Sub-county_Name_KALOLENI'
+  - 'Sub-county_Name_KILIFI NORTH'
+  - 'Sub-county_Name_KILIFI SOUTH'
+  - 'Sub-county_Name_MAGARINI'
+  - 'Sub-county_Name_MALINDI'
+  - 'Sub-county_Name_RABAI'
+  # Sub-county Names (Tana River County)
+  - 'Sub-county_Name_BURA'
+  - 'Sub-county_Name_GALOLE'
+  - 'Sub-county_Name_GARSEN'
+  # Sub-county Names (Lamu County)  
+  - 'Sub-county_Name_LAMU EAST'
+  - 'Sub-county_Name_LAMU WEST'
+  # Sub-county Names (Taita Taveta County)
+  - 'Sub-county_Name_MWATATE'
+  - 'Sub-county_Name_TAVETA'
+  - 'Sub-county_Name_VOI'
+  - 'Sub-county_Name_WUNDANYI'
+  # Sub-county Names (Garissa County)
+  - 'Sub-county_Name_DAADAB'
+  - 'Sub-county_Name_FAFI'
+  - 'Sub-county_Name_GARISSA TOWNSHIP'
+  - 'Sub-county_Name_HULUGHO'
+  - 'Sub-county_Name_IJARA'
+  - 'Sub-county_Name_LAGDERA'
+  - 'Sub-county_Name_BALAMBALA'
+  # Sub-county Names (Wajir County)
+  - 'Sub-county_Name_ELDAS'
+  - 'Sub-county_Name_TARBAJ'
+  - 'Sub-county_Name_WAJIR EAST'
+  - 'Sub-county_Name_WAJIR NORTH'
+  - 'Sub-county_Name_WAJIR SOUTH'
+  - 'Sub-county_Name_WAJIR WEST'
+  # Sub-county Names (Mandera County)
+  - 'Sub-county_Name_BANISSA'
+  - 'Sub-county_Name_LAFEY'
+  - 'Sub-county_Name_MANDERA EAST'
+  - 'Sub-county_Name_MANDERA NORTH'
+  - 'Sub-county_Name_MANDERA SOUTH'
+  - 'Sub-county_Name_MANDERA WEST'
+  # Sub-county Names (Marsabit County)
+  - 'Sub-county_Name_LAISAMIS'
+  - 'Sub-county_Name_MOYALE'
+  - 'Sub-county_Name_NORTH HORR'
+  - 'Sub-county_Name_SAKU'
+  # Sub-county Names (Isiolo County)
+  - 'Sub-county_Name_ISIOLO'
+  - 'Sub-county_Name_MERTI'
+  - 'Sub-county_Name_GARBATULLA'
+  # Sub-county Names (Meru County)
+  - 'Sub-county_Name_BUURI'
+  - 'Sub-county_Name_IGEMBE CENTRAL'
+  - 'Sub-county_Name_IGEMBE NORTH'
+  - 'Sub-county_Name_IGEMBE SOUTH'
+  - 'Sub-county_Name_IMENTI CENTRAL'
+  - 'Sub-county_Name_IMENTI NORTH'
+  - 'Sub-county_Name_IMENTI SOUTH'
+  - 'Sub-county_Name_TIGANIA EAST'
+  - 'Sub-county_Name_TIGANIA WEST'
+  # Sub-county Names (Tharaka-Nithi County)
+  - 'Sub-county_Name_THARAKA NORTH'
+  - 'Sub-county_Name_THARAKA SOUTH'
+  - 'Sub-county_Name_CHUKA'
+  - 'Sub-county_Name_IGAMBANG''OMBE'
+  - 'Sub-county_Name_MAARA'
+  - 'Sub-county_Name_CHIAKARIGA'
+  - 'Sub-county_Name_MUTHAMBI'
+  # Sub-county Names (Embu County)
+  - 'Sub-county_Name_MANYATTA'
+  - 'Sub-county_Name_MBEERE NORTH'
+  - 'Sub-county_Name_MBEERE SOUTH'
+  - 'Sub-county_Name_RUNYENJES'
+  # Sub-county Names (Kitui County)
+  - 'Sub-county_Name_KITUI WEST'
+  - 'Sub-county_Name_KITUI CENTRAL'
+  - 'Sub-county_Name_KITUI RURAL'
+  - 'Sub-county_Name_KITUI SOUTH'
+  - 'Sub-county_Name_KITUI EAST'
+  - 'Sub-county_Name_MWINGI NORTH'
+  - 'Sub-county_Name_MWINGI WEST'
+  - 'Sub-county_Name_MWINGI CENTRAL'
+  # Sub-county Names (Machakos County)
+  - 'Sub-county_Name_KATHIANI'
+  - 'Sub-county_Name_MACHAKOS TOWN'
+  - 'Sub-county_Name_MASINGA'
+  - 'Sub-county_Name_MATUNGULU'
+  - 'Sub-county_Name_MAVOKO'
+  - 'Sub-county_Name_MWALA'
+  - 'Sub-county_Name_YATTA'
+  # Sub-county Names (Makueni County)
+  - 'Sub-county_Name_KAITI'
+  - 'Sub-county_Name_KIBWEZI WEST'
+  - 'Sub-county_Name_KIBWEZI EAST'
+  - 'Sub-county_Name_KILOME'
+  - 'Sub-county_Name_MAKUENI'
+  - 'Sub-county_Name_MBOONI'
+  # Sub-county Names (Nyandarua County)
+  - 'Sub-county_Name_KINANGOP'
+  - 'Sub-county_Name_KIPIPIRI'
+  - 'Sub-county_Name_NDARAGWA'
+  - 'Sub-county_Name_OL KALOU'
+  - 'Sub-county_Name_OL JORO OROK'
+  # Sub-county Names (Nyeri County)
+  - 'Sub-county_Name_KIENI EAST'
+  - 'Sub-county_Name_KIENI WEST'
+  - 'Sub-county_Name_MATHIRA EAST'
+  - 'Sub-county_Name_MATHIRA WEST'
+  - 'Sub-county_Name_MUKURWEINI'
+  - 'Sub-county_Name_NYERI TOWN'
+  - 'Sub-county_Name_OTHEYA'
+  - 'Sub-county_Name_TETU'
+  # Sub-county Names (Kirinyaga County)
+  - 'Sub-county_Name_KIRINYAGA CENTRAL'
+  - 'Sub-county_Name_KIRINYAGA EAST'
+  - 'Sub-county_Name_KIRINYAGA WEST'
+  - 'Sub-county_Name_MWEA EAST'
+  - 'Sub-county_Name_MWEA WEST'
+  # Sub-county Names (Murang'a County)
+  - 'Sub-county_Name_GATANGA'
+  - 'Sub-county_Name_KAHURO'
+  - 'Sub-county_Name_KANDARA'
+  - 'Sub-county_Name_KANGEMA'
+  - 'Sub-county_Name_KIGUMO'
+  - 'Sub-county_Name_KIHARU'
+  - 'Sub-county_Name_MATHIOYA'
+  - 'Sub-county_Name_MURANG''A SOUTH'
+  # Sub-county Names (Kiambu County)
+  - 'Sub-county_Name_GATUNDU NORTH'
+  - 'Sub-county_Name_GATUNDU SOUTH'
+  - 'Sub-county_Name_GITHUNGURI'
+  - 'Sub-county_Name_JUJA'
+  - 'Sub-county_Name_KABETE'
+  - 'Sub-county_Name_KIAMBAA'
+  - 'Sub-county_Name_KIAMBU'
+  - 'Sub-county_Name_KIKUYU'
+  - 'Sub-county_Name_LIMURU'
+  - 'Sub-county_Name_RUIRU'
+  - 'Sub-county_Name_THIKA TOWN'
+  - 'Sub-county_Name_LARI'
+  # Other counties...
+  # Season fields
+  - 'Season_Autumn'
+  - 'Season_short rains'
+  - 'Season_long rains'
+  - 'Season_Summer'
+  - 'Season_Whole Year'
+  - 'Season_Winter'
+  # Crop fields
+  - 'Crop_Maize (Processed)'
+  - 'Crop_Coconut'
+  - 'Crop_Pigeon Peas'
+  - 'Crop_Coconut (Raw)'
+  - 'Crop_Pearl Millet'
+  - 'Crop_Bananas'
+  - 'Crop_Barley'
+  - 'Crop_Common Beans & Mung Beans (Vegetable)'
+  - 'Crop_Okra'
+  - 'Crop_Bitter Gourd'
+  - 'Crop_Black Pepper'
+  - 'Crop_Blackgram'
+  - 'Crop_Bottle Gourd'
+  - 'Crop_Eggplant'
+  - 'Crop_Cabbage'
+  - 'Crop_Cardamom'
+  - 'Crop_Carrots'
+  - 'Crop_Cashew Nuts'
+  - 'Crop_Cashew Nuts Processed'
+  - 'Crop_Cashew Nuts Raw'
+  - 'Crop_Castor seed'
+  - 'Crop_Oranges'
+  - 'Crop_Coconut '
+  - 'Crop_Coffee'
+  - 'Crop_Coriander'
+  - 'Crop_Cotton(lint)'
+  - 'Crop_Cowpeas'
+  - 'Crop_Cucumber'
+  - 'Crop_Drum Stick'
+  - 'Crop_Dry Chillies'
+  - 'Crop_Dry Ginger'
+  - 'Crop_Garlic'
+  - 'Crop_Ginger'
+  - 'Crop_Chickpeas'
+  - 'Crop_Grapes'
+  - 'Crop_Groundnuts'
+  - 'Crop_Guar seed'
+  - 'Crop_Horse-gram'
+  - 'Crop_Jackfruit'
+  - 'Crop_Sorghum'
+  - 'Crop_Jute'
+  - 'Crop_Khesari'
+  - 'Crop_Korra'
+  - 'Crop_Lemons'
+  - 'Crop_Linseed'
+  - 'Crop_Maize'
+  - 'Crop_Mangoes'
+  - 'Crop_Lentils'
+  - 'Crop_Mesta'
+  - 'Crop_Mung Beans'
+  - 'Crop_Moth'
+  - 'Crop_Niger seed'
+  - 'Crop_Oilseeds total'
+  - 'Crop_Onions'
+  - 'Crop_Oranges'
+  - 'Crop_Other Rabi pulses'
+  - 'Crop_Other Cereals & Millets'
+  - 'Crop_Other Fresh Fruits'
+  - 'Crop_Other Kharif pulses'
+  - 'Crop_Other Vegetables'
+  - 'Crop_Rice'
+  - 'Crop_Papaya'
+  - 'Crop_Peas (vegetable)'
+  - 'Crop_Peas & Beans (Pulses)'
+  - 'Crop_Pineapples'
+  - 'Crop_Pome Fruit'
+  - 'Crop_Pomegranates'
+  - 'Crop_Potatoes'
+  - 'Crop_Pulses total'
+  - 'Crop_Pumpkin'
+  - 'Crop_Finger Millet'
+  - 'Crop_Rapeseed & Mustard'
+  - 'Crop_Radish'
+  - 'Crop_Rice'
+  - 'Crop_Rubber'
+  - 'Crop_Safflower'
+  - 'Crop_Samai'
+  - 'Crop_Sannhamp'
+  - 'Crop_Sapota'
+  - 'Crop_Sesame'
+  - 'Crop_Small Millets'
+  - 'Crop_Snake Gourd'
+  - 'Crop_Soya Beans'
+  - 'Crop_Sugarcane'
+  - 'Crop_Sunflower'
+  - 'Crop_Sweet Potatoes'
+  - 'Crop_Cassava'
+  - 'Crop_Tea'
+  - 'Crop_Tobacco'
+  - 'Crop_Tomatoes'
+  - 'Crop_Turmeric'
+  - 'Crop_Turnip'
+  - 'Crop_Blackgram'
+  - 'Crop_Varagu'
+  - 'Crop_Wheat'
+  - 'Crop_other fibres'
+  - 'Crop_other misc. pulses'
+  - 'Crop_other oilseeds'
