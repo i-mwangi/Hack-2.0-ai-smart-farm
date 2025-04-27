@@ -1,4 +1,4 @@
-import axios from "../helpers/axios";
+import axios from "../helper/axios";
 import { authConstants } from "./constants";
 export const login = (user) => {
   return async (dispatch) => {
@@ -55,5 +55,32 @@ export const isuserLoggedIn = () => {
         },
       });
     }
+  };
+};
+
+// New action to skip login
+export const skipLogin = () => {
+  return async (dispatch) => {
+    console.log("skipLogin action creator running...");
+    const dummyUser = {
+      firstName: "Dev",
+      lastName: "User",
+      email: "skip@example.com",
+      _id: "dummy_id",
+    };
+    const dummyToken = "skipped-login-token";
+    
+    localStorage.setItem("token", dummyToken);
+    localStorage.setItem("user", JSON.stringify(dummyUser));
+    console.log("Dummy data set in localStorage");
+
+    dispatch({
+      type: authConstants.SKIP_LOGIN_SUCCESS,
+      payload: {
+        token: dummyToken,
+        user: dummyUser,
+      },
+    });
+    console.log("SKIP_LOGIN_SUCCESS dispatched");
   };
 };

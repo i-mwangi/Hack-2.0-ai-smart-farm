@@ -82,8 +82,6 @@ const ChatbotUI = () => {
 const handleDataFromChild =  async (data)=>{
   console.log(data);
   if (data.trim()) {
-    // console.log(data);
-    
     const userMessage = {
       id: messages.length + 1,
       text: data,
@@ -94,57 +92,53 @@ const handleDataFromChild =  async (data)=>{
       }),
     };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-    console.log(messages)
-    // setInput("");
     
     setIsLoading(true);
-const response = await axios.post("https://mumbaihacks-chatdisease.onrender.com/chat", {
-  query: data,
-  language: language.toLowerCase().slice(0,2)
-})
-setMessages((prev) => [...prev , {
-  id: messages.length + 1,
-      text: response.data.response,
-      isBot: true,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-}])
-setIsLoading(false);
-// setMessages({
-//   id: messages.length + 1,
-//       text: response.data.response,
-//       isBot: true,
-//       timestamp: new Date().toLocaleTimeString([], {
-//         hour: "2-digit",
-//         minute: "2-digit",
-//       }),
-// })
-console.log("response" , response)
 
+    try {
+      const response = await axios.post("http://127.0.0.1:5001/chat", {
+        query: data,
+        language: language.toLowerCase().slice(0,2)
+      }, {
+        timeout: 15000  // 15 second timeout
+      });
+      
+      console.log("response" , response);
+
+      setMessages((prev) => [...prev , {
+        id: prev.length + 1,
+        text: response.data.response || "(No response content received)",
+        isBot: true,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }]);
+
+    } catch (error) {
+      console.error("API Error:", error);
+      let errorText = "Sorry, I couldn't process your request. Please try again later.";
+      if (error.code === 'ECONNABORTED') {
+          errorText = "Sorry, the request took too long. Please try again.";
+      } else if (error.response && error.response.data && error.response.data.response) {
+          errorText = `Sorry, an error occurred: ${error.response.data.response}`;
+      }
+      
+      setMessages((prev) => [...prev, {
+        id: prev.length + 1,
+        text: errorText,
+        isBot: true,
+        isError: true,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   }
 }
-  // const onSubmit = async (data) => {
-  //   // e.preventDefault();
-  //   if (data.trim()) {
-  //     const userMessage = {
-  //       id: messages.length + 1,
-        
-  //       text: input,
-  //       isBot: false,
-  //       timestamp: new Date().toLocaleTimeString([], {
-  //         hour: "2-digit",
-  //         minute: "2-digit",
-  //       }),
-  //     };
-  //     setMessages((prevMessages) => [...prevMessages, userMessage]);
-  //     console.log(messages)
-  //     setInput("");
-  //     setIsLoading(true);
-
-  //   }
-  // };
 
   const MessageBubble = ({ message }) => (
     <div

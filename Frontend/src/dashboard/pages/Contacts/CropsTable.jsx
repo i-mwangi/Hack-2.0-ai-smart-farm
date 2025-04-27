@@ -52,11 +52,11 @@ const CropsTable = ({ crops }) => {
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="p-4">{crop.crop.name}</td>
                   <td className="p-4 text-right">{crop.crop.qnt}</td>
-                  <td className="p-4 text-right">₹{crop.sold_at.toLocaleString()}</td>
-                  <td className="p-4 text-right">₹{revenue.toLocaleString()}</td>
-                  <td className="p-4 text-right">₹{expenses.toLocaleString()}</td>
+                  <td className="p-4 text-right">ks{crop.sold_at.toLocaleString()}</td>
+                  <td className="p-4 text-right">ksh{revenue.toLocaleString()}</td>
+                  <td className="p-4 text-right">ksh{expenses.toLocaleString()}</td>
                   <td className={`p-4 text-right font-medium ₹{profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  ₹{Math.abs(profit).toLocaleString()}
+                  ksh{Math.abs(profit).toLocaleString()}
                     {profit >= 0 ? ' profit' : ' loss'}
                   </td>
                   <td className="p-4">
@@ -77,7 +77,7 @@ const CropsTable = ({ crops }) => {
                               <div>Quantity:</div>
                               <div>{crop.crop.qnt}</div>
                               <div>Sold At:</div>
-                              <div>₹{crop.sold_at.toLocaleString()}</div>
+                              <div>ksh{crop.sold_at.toLocaleString()}</div>
                             </div>
                           </div>
                           
@@ -85,19 +85,19 @@ const CropsTable = ({ crops }) => {
                             <h3 className="font-medium mb-2">Expenses Breakdown</h3>
                             <div className="grid grid-cols-2 gap-2 text-sm">
                               <div>Seeds:</div>
-                              <div>₹{crop.expense.seeds.toLocaleString()}</div>
+                              <div>ksh{crop.expense.seeds.toLocaleString()}</div>
                               <div>Electricity:</div>
-                              <div>₹{crop.expense.electricity.toLocaleString()}</div>
+                              <div>ksh{crop.expense.electricity.toLocaleString()}</div>
                               <div>Machinery:</div>
-                              <div>₹{crop.expense.machinery.toLocaleString()}</div>
+                              <div>ksh{crop.expense.machinery.toLocaleString()}</div>
                               <div>Labor:</div>
-                              <div>₹{crop.expense.labor.toLocaleString()}</div>
+                              <div>ksh{crop.expense.labor.toLocaleString()}</div>
                               <div>Water Usage:</div>
-                              <div>₹{crop.expense.water_usage.toLocaleString()}</div>
+                              <div>ksh{crop.expense.water_usage.toLocaleString()}</div>
                               <div>Storage:</div>
-                              <div>₹{crop.expense.storage.toLocaleString()}</div>
+                              <div>ksh{crop.expense.storage.toLocaleString()}</div>
                               <div>Transport:</div>
-                              <div>₹{crop.expense.transport.toLocaleString()}</div>
+                              <div>ksh{crop.expense.transport.toLocaleString()}</div>
                             </div>
                           </div>
   
@@ -107,7 +107,7 @@ const CropsTable = ({ crops }) => {
                               {crop.expense.fertilizers.map((fertilizer, idx) => (
                                 <div key={idx} className="grid grid-cols-2 gap-2 text-sm">
                                   <div>{fertilizer.name}:</div>
-                                  <div>₹{fertilizer.cost.toLocaleString()}</div>
+                                  <div>ksh{fertilizer.cost.toLocaleString()}</div>
                                 </div>
                               ))}
                             </div>
@@ -119,7 +119,7 @@ const CropsTable = ({ crops }) => {
                               {crop.expense.pesticides.map((pesticide, idx) => (
                                 <div key={idx} className="grid grid-cols-2 gap-2 text-sm">
                                   <div>{pesticide.name}:</div>
-                                  <div>₹{pesticide.cost.toLocaleString()}</div>
+                                  <div>ksh{pesticide.cost.toLocaleString()}</div>
                                 </div>
                               ))}
                             </div>
@@ -128,12 +128,12 @@ const CropsTable = ({ crops }) => {
                           <div className="border-t pt-4">
                             <div className="grid grid-cols-2 gap-2 text-sm font-medium">
                               <div>Total Revenue:</div>
-                              <div>₹{revenue.toLocaleString()}</div>
+                              <div>ksh{revenue.toLocaleString()}</div>
                               <div>Total Expenses:</div>
-                              <div>₹{expenses.toLocaleString()}</div>
+                              <div>ksh{expenses.toLocaleString()}</div>
                               <div>Net Profit/Loss:</div>
                               <div className={profit >= 0 ? 'text-green-600' : 'text-red-600'}>
-                                ₹{Math.abs(profit).toLocaleString()}
+                                ksh{Math.abs(profit).toLocaleString()}
                                 {profit >= 0 ? ' profit' : ' loss'}
                               </div>
                             </div>

@@ -1,6 +1,3 @@
-
-
-
 export const authConstants = {
   LOGIN_REQUEST: "LOGIN_REQUEST",
   LOGIN_FAILURE: "LOGIN_FAILURE",
@@ -12,6 +9,7 @@ export const authConstants = {
   SIGNUP_REQUEST: "SIGNUP_REQUEST",
   SIGNUP_SUCCESS: "SIGNUP_SUCCESS",
   SIGNUP_FAILURE: "SIGNUP_FAILURE",
+  SKIP_LOGIN_SUCCESS: "SKIP_LOGIN_SUCCESS",
 };
 
 export const userConstants = {

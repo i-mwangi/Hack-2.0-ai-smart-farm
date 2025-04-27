@@ -1,15 +1,17 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ArrowRight, LoaderCircle, Lock, Mail } from "lucide-react"
+import { ArrowRight, LoaderCircle, Lock, Mail, SkipForward } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
+import { skipLogin } from "@/actions/auth"
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -19,6 +21,7 @@ const FormSchema = z.object({
 export default function LoginForm({ flip }) {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -50,6 +53,16 @@ export default function LoginForm({ flip }) {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleSkipLogin = () => {
+    console.log("Skip Login button clicked!");
+    dispatch(skipLogin())
+    toast({
+      title: "Skipping Login",
+      description: "Entering dashboard with developer access.",
+    })
+    navigate("/dashboard")
   }
 
   return (
@@ -126,18 +139,27 @@ export default function LoginForm({ flip }) {
               </a>
             </div>
           </div>
-          <div>
+          <div className="flex flex-col sm:flex-row gap-4">
             <Button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out"
+              className="flex-1 w-full"
             >
               {isLoading ? (
-                <LoaderCircle className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
               ) : (
-                <ArrowRight className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" size={18} />
+                <ArrowRight className="mr-2 h-4 w-4" />
               )}
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              Sign In
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleSkipLogin}
+              className="flex-1 w-full"
+            >
+              <SkipForward className="mr-2 h-4 w-4" />
+              Skip Login (Dev)
             </Button>
           </div>
         </form>

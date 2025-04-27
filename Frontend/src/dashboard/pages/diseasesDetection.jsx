@@ -35,7 +35,7 @@ const LoadingAnimation = () => (
         Analyzing Plant...
       </div>
     </div>
-  </div>
+  </div>
 );
 const MedicalImageAnalysis = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -90,7 +90,7 @@ const MedicalImageAnalysis = () => {
     formData.append("language", language.toLowerCase().slice(0, 2));
     try {
       const response = await axios.post(
-        "https://mumbaihacks-chatdisease.onrender.com/classify_plant_disease",
+        "http://127.0.0.1:5001/classify_plant_disease",
         formData
       );
 

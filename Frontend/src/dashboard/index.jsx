@@ -12,36 +12,29 @@ import {
   VeganIcon,
   WheatIcon,
 } from "lucide-react";
-import { Route, Routes, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Outlet } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Dashboard from "./pages/Homepage/Dashboard";
-import ChatbotUI from "./pages/chatbot";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import FarmerProfile from "./pages/ProfilePage";
 import { CloudSunRain } from "lucide-react";
 import { Sprout } from "lucide-react";
-import MedicalImageAnalysis from "./pages/diseasesDetection";
-import CropRecommend from "./pages/CropRecommendation/CropRecommend";
-import { FarmAnalytics } from "./pages/Contacts/Contact";
-import FertilizerRecommend from "./pages/FertilizerRecommend/FertilizerRecommend";
-import YieldPredict from "./pages/YieldPrediction/YieldPredict";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+
 function Navbar() {
-  const navigate = useNavigate(); // Initialize useNavigate hook at the top level
+  const navigate = useNavigate();
   const navRef = useRef(null);
   const navItems = [
-    { label: "Home", path: "/dashboard", icon: CloudSunRain },
-    { label: "Chatbot", path: "/bot", icon: Bot },
-    { label: "Diseases", path: "/diseases", icon: Sprout },
-    { label: "Yield", path: "/yield", icon: WheatIcon },
-    { label: "Fertilizers", path: "/fertilizers", icon:Crop},
+    { label: "Home", path: ".", icon: CloudSunRain },
+    { label: "Chatbot", path: "bot", icon: Bot },
+    { label: "Diseases", path: "diseases", icon: Sprout },
+    { label: "Yield", path: "yield", icon: WheatIcon },
+    { label: "Fertilizers", path: "fertilizers", icon: Crop },
     {
       label: "Crop Recommendation",
-      path: "/crop-recommendation",
+      path: "crop-recommendation",
       icon: VeganIcon,
     },
     {
       label: "Inventory",
-      path: "/inventory",
+      path: "inventory",
       icon: Warehouse,
     },
   ];
@@ -66,7 +59,6 @@ function Navbar() {
           isExpanded ? "w-64" : "w-20"
         } z-20`}
       >
-        {/* Toggle Button */}
         <button
           onClick={handletogglebar}
           className="absolute -right-3 top-20 transform bg-white rounded-full p-1 border border-gray-300 z-20 shadow-md hover:bg-gray-100 transition-colors duration-200"
@@ -86,16 +78,13 @@ function Navbar() {
           )}
         </button>
 
-        {/* Logo */}
         <div className="flex-shrink-0 flex items-center justify-center h-16 border-b border-gray-200">
           <div className="h-10 w-10 bg-green-200 rounded-md border border-green-300 flex items-center justify-center">
             <span className="text-green-800 font-bold text-lg">A</span>
           </div>
         </div>
 
-        {/* Nav Container with flex-col */}
         <div className="flex flex-col h-full">
-          {/* Nav Items */}
           <nav className="flex flex-col items-center space-y-1 py-4">
             {navItems.map((item, index) => (
               <React.Fragment key={index}>
@@ -141,10 +130,8 @@ function Navbar() {
             ))}
           </nav>
 
-          {/* Spacer */}
           <div className="flex-grow"></div>
 
-          {/* Avatar section */}
           <div className="flex flex-col items-center justify-center gap-3">
             <button
               onClick={handleLogout}
@@ -158,7 +145,6 @@ function Navbar() {
             </button>
 
             <Link to={"/profile"}>
-              {" "}
               <div className="p-4 border-t border-gray-200">
                 <div
                   className={`flex items-center ${
@@ -195,19 +181,11 @@ function Navbar() {
         }`}
       >
         <main>
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/bot" element={<ChatbotUI />} />
-            <Route path="/yield" element={<YieldPredict />} />
-            <Route path="/fertilizers" element={<FertilizerRecommend />} />
-            <Route path="/diseases" element={<MedicalImageAnalysis />} />
-            <Route path="/profile" element={<FarmerProfile />} />
-            <Route path="/crop-recommendation" element={<CropRecommend />} />
-            <Route path="/inventory" element={<FarmAnalytics />} />
-          </Routes>
+          <Outlet />
         </main>
       </ScrollArea>
     </div>
   );
 }
+
 export default Navbar;

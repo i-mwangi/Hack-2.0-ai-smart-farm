@@ -49,29 +49,88 @@ def home():
         ]
     })
 
-# Route for general prediction
+# Route for prediction endpoint, assuming rf_model expects detailed features
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         data = request.get_json()
+        app.logger.info(f"Received data for /predict: {data}") 
         
-        # Extract features from the request
-        features = [data.get(col, 0) for col in rf_cols]
-        features_df = pd.DataFrame([features], columns=rf_cols)
+        if not data:
+            return jsonify({"status": "error", "message": "No input data provided"}), 400
+
+        # Extract features - Use keys EXACTLY as seen in the backend log
+        try:
+            N = float(data['nitrogen'])
+            P = float(data['phosphorous'])
+            K = float(data['potassium'])
+            temperature = float(data['temperature'])
+            humidity = float(data['humidity'])
+            ph = float(data['ph'])
+            rainfall = float(data['rainfall'])
+            # Use lowercase keys as received by the server
+            soil_type_str = data['soil_type'] 
+            crop_type_str = data['crop_type'] # Assuming frontend 'crop' becomes 'crop_type' 
+            # Check if soil_moisture arrived - it seems it didn't based on logs
+            if 'soil_moisture' not in data:
+                # If it's truly optional for the model, use a default. Otherwise, raise error.
+                app.logger.warning("'soil_moisture' key not found in received data, using default 0. Check frontend payload.")
+                soil_moisture = 0.0 # Default if optional
+                # Alternatively, if required by model, raise KeyError explicitly:
+                # raise KeyError("'soil_moisture' is missing from the request data")
+            else:
+                soil_moisture = float(data['soil_moisture']) 
+        except KeyError as e:
+            app.logger.error(f"KeyError accessing key: {e}. Data received: {data}")
+            return jsonify({"status": "error", "message": f"Missing required input field key: {e}"}), 400
+        except ValueError as e:
+             app.logger.error(f"ValueError converting data: {e}. Data received: {data}")
+             return jsonify({"status": "error", "message": f"Invalid numeric value provided: {e}"}), 400
+
+        # Convert categorical strings to numeric using mappings
+        soil_type_num = soil_type_mapping.get(soil_type_str, -1)
+        # crop_type_num = crop_type_mapping.get(crop_type_str, -1) # Keep getting this for fertilizer lookup later
+        # We don't check crop_type_num for error here, assuming rf_model doesn't need it directly based on 8 feature error
+
+        if soil_type_num == -1:
+             expected_keys = list(soil_type_mapping.keys())
+             return jsonify({"status": "error", "message": f"Invalid soil_type: '{soil_type_str}'. Expected one of: {expected_keys}"}), 400
         
-        # Make prediction
-        prediction = rf_model.predict(features_df)
+        # Construct the feature list/array with 8 features based on error message analysis
+        # Assuming order [N, P, K, temperature, humidity, ph, rainfall, soil_type_num]
+        input_features = [[ N, P, K, temperature, humidity, ph, rainfall, 
+                           soil_type_num 
+                         ]]
         
+        app.logger.info(f"Predicting with 8 features: {input_features}")
+
+        # Make prediction using rf_model 
+        prediction = rf_model.predict(input_features)
+        
+        # --- Result handling (Assuming it predicts fertilizer ID) --- 
+        prediction_value = prediction[0]
+        if hasattr(prediction_value, 'item'): 
+            prediction_serializable = prediction_value.item()
+        else:
+            prediction_serializable = prediction_value
+            
+        fertilizer_name = fertilizer_name_mapping.get(prediction_serializable, "Unknown Fertilizer")
+        fertilizer_info = fertilizer_descriptions.get(str(prediction_serializable), "No description available")
+
         return jsonify({
             "status": "success",
-            "prediction": prediction[0],
-            "message": "Prediction made successfully"
+            "fertilizer_prediction": prediction_serializable, 
+            "fertilizer_name": fertilizer_name,
+            "description": fertilizer_info,
+            "message": "Prediction successful (using 8 features)"
         })
+
     except Exception as e:
+        app.logger.error(f"Prediction error: {e}", exc_info=True)
         return jsonify({
             "status": "error",
-            "message": str(e)
-        }), 400
+            "message": f"An error occurred during prediction: {e}"
+        }), 500
 
 # Route for fertilizer recommendation
 @app.route('/fertilizer-recommend', methods=['POST'])
@@ -151,4 +210,4 @@ def crop_recommend():
         }), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5002, debug=True)
